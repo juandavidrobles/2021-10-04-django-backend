@@ -85,3 +85,23 @@ def get_all_users():
   file.close()
   print(users)
   return users
+
+def get_user_details(request, user_id):
+  user = get_user_by_id(user_id)
+  if (not(user)):
+    return HttpResponse("<h1>User not found</h1>")
+
+  render = render_template('miPrimerProyecto/templates/user-details.html', user)
+  return HttpResponse(render)
+
+def get_user_by_id(user_id):
+  users = get_all_users()
+  for user in users:
+    if (user['id'] == user_id):
+      return user
+
+def render_template(template_path: str, data: dict)-> any:
+  file = open(template_path, 'r')
+  template = Template(file.read())
+  file.close()
+  return template.render(Context(data))
